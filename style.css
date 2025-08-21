@@ -1,0 +1,146 @@
+:root{
+  --radius: 24px;
+  --glass: rgba(255,255,255,.08);
+  --stroke: rgba(255,255,255,.15);
+  --text: #ecf0ff;
+  --shadow: 0 10px 40px rgba(0,0,0,.35);
+}
+
+html,body{
+  height:100%;
+  margin:0;
+  background:#0b0f1a;
+  color:var(--text);
+  font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,Arial;
+}
+
+/* Animated gradient backdrop */
+.bg{
+  position:fixed; inset:0;
+  background: radial-gradient(1200px 800px at 10% 20%, #6a5cff 0%, rgba(106,92,255,0) 55%),
+              radial-gradient(1000px 700px at 90% 30%, #09c6f9 0%, rgba(9,198,249,0) 55%),
+              radial-gradient(1100px 900px at 50% 90%, #ff7eb3 0%, rgba(255,126,179,0) 55%),
+              linear-gradient(115deg, #0b0f1a, #0a0d18 60%, #0b0f1a);
+  filter: saturate(1.15) blur(0px);
+  animation: drift 16s ease-in-out infinite alternate;
+  will-change: background-position, transform, filter;
+}
+@keyframes drift{
+  0%   { transform: translate3d(0,0,0) scale(1);     filter: blur(0.5px); }
+  50%  { transform: translate3d(0,-8px,0) scale(1.02); filter: blur(1px); }
+  100% { transform: translate3d(0,6px,0) scale(1.015); filter: blur(0.5px); }
+}
+
+/* Subtle gradient sheen overlay */
+.sheen{
+  position:fixed; inset:0; pointer-events:none;
+  background: conic-gradient(from 180deg at 50% 50%,
+    rgba(255,255,255,.04), rgba(255,255,255,0) 20%,
+    rgba(255,255,255,.04) 40%, rgba(255,255,255,0) 60%,
+    rgba(255,255,255,.04) 80%, rgba(255,255,255,0) 100%);
+  mix-blend-mode: overlay;
+  animation: spin 24s linear infinite;
+}
+@keyframes spin{ to { transform: rotate(360deg); } }
+
+.wrap{
+  position:relative;
+  min-height:100%;
+  display:grid;
+  place-items:center;
+  padding:48px 16px;
+}
+
+/* Glass card */
+.card{
+  position:relative;
+  width:min(820px, 92vw);
+  border-radius:var(--radius);
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border:1px solid var(--stroke);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+
+.card::before{
+  content:"";
+  position:absolute; inset:-2px;
+  background: conic-gradient(from 0deg at 50% 50%,
+    #8e8cff, #55d6ff, #ff9ac2, #8e8cff);
+  filter: blur(16px);
+  opacity:.15;
+  animation: borderGlow 10s linear infinite;
+  z-index:0;
+}
+@keyframes borderGlow{ to { transform: rotate(360deg); } }
+
+.inner{
+  position:relative; z-index:1;
+  padding:38px 36px 34px;
+}
+
+h1{
+  font-size: clamp(28px, 4vw, 44px);
+  line-height:1.05;
+  margin:0 0 10px;
+  letter-spacing:.3px;
+}
+.lead{
+  opacity:.9;
+  font-size: clamp(14px, 1.6vw, 18px);
+  line-height:1.6;
+  margin:0 0 22px;
+}
+
+/* Buttons */
+.actions{ display:flex; gap:12px; flex-wrap:wrap; }
+
+.btn{
+  position:relative;
+  border:none;
+  cursor:pointer;
+  padding:14px 20px;
+  font-weight:700;
+  letter-spacing:.2px;
+  border-radius:14px;
+  transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
+  will-change: transform, box-shadow;
+}
+
+.btn.primary{
+  color:#0a0d18;
+  background:
+    radial-gradient(120% 120% at 0% 0%, #ffffff 0%, #c6dbff 45%, #99f2ff 100%);
+  box-shadow: 0 10px 30px rgba(153,242,255,.25);
+}
+.btn.primary:hover{ transform: translateY(-2px); }
+.btn.primary:active{ transform: translateY(0); }
+
+.btn.ghost{
+  color:var(--text);
+  background: rgba(255,255,255,.06);
+  border:1px solid var(--stroke);
+}
+.btn.ghost:hover{ opacity:.9; transform: translateY(-1px); }
+.btn.ghost:active{ transform: translateY(0); }
+
+/* Floating accent blobs */
+.blob{
+  position:absolute; border-radius:50%;
+  filter: blur(18px); opacity:.22; z-index:0;
+  animation: float 14s ease-in-out infinite alternate;
+}
+.blob.b1{ width:320px; height:320px; background:#7a6bff; top:-140px; right:-120px; animation-delay: -2s; }
+.blob.b2{ width:260px; height:260px; background:#00d1ff; bottom:-120px; left:-80px;  animation-delay: -6s; }
+@keyframes float{
+  0% { transform: translate(0,0) scale(1); }
+  100%{ transform: translate(16px,-12px) scale(1.06); }
+}
+
+/* Mouse-responsive tilt */
+.tilt{
+  transition: transform .25s ease;
+  transform-style: preserve-3d;
+}
